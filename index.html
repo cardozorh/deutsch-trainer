@@ -287,6 +287,15 @@ function render(){
  let controls=mode==="practice"?`<div class="actions"><button class="check" onclick="check()">✓ Comprobar respuestas</button><button class="reset" onclick="render()">↻ Borrar y empezar de nuevo</button></div><div id="result" class="result"></div><div class="note">Los aciertos quedan fijados. Los errores se borran para que puedas intentarlos otra vez.</div>`:"";
  content.innerHTML=`<section class="card"><h2 class="section-title">${heading}</h2><p class="note">${note}</p>${table}${controls}</section>`;
  // Orden nativo del foco para Android: género completo antes de pasar al siguiente.
+ if(exercise==="pronouns" && mode==="practice"){
+   const px=[...document.querySelectorAll('#content input[data-kind="pronoun"]')];
+   const po=[
+     ...px.filter(x=>x.dataset.case==="Akkusativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i)),
+     ...px.filter(x=>x.dataset.case==="Dativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i))
+   ];
+   po.forEach((x,i)=>x.tabIndex=i+1);
+ }
+
  if(exercise==="articles" && mode==="practice"){
    const xs=[...document.querySelectorAll('#content input[data-kind="article"]')];
    const gs=["Maskulin","Neutrum","Feminin","Plural"];
@@ -336,8 +345,8 @@ document.addEventListener("keydown",e=>{
    e.preventDefault();
    const xs=[...document.querySelectorAll('#content input[data-kind="pronoun"]')];
    const ordered=[
-     ...xs.filter(x=>x.dataset.col==="akk"),
-     ...xs.filter(x=>x.dataset.col==="dat")
+     ...xs.filter(x=>x.dataset.case==="Akkusativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i)),
+     ...xs.filter(x=>x.dataset.case==="Dativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i))
    ];
    let n=ordered.indexOf(el)+(e.shiftKey?-1:1);
    if(n>=0 && n<ordered.length) ordered[n].focus();
