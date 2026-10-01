@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deutsch Tabellen – Artículos y pronombres</title>
+<style>
+:root{--bg:#f5f3ee;--card:#fff;--ink:#222;--muted:#6d6a64;--line:#d8d2c8;--good:#16784a;--bad:#b42318;--er:#2563eb;--e:#dc2626;--es:#16803a;--en:#d97706;--em:#7c3aed}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+main{max-width:1150px;margin:28px auto;padding:0 18px}h1{margin:0 0 5px}.sub,.note{color:var(--muted)}
+.tabs{display:flex;gap:8px;margin:20px 0 18px;flex-wrap:wrap}button{border:1px solid #bdb6aa;background:#ebe7df;color:#222;border-radius:10px;padding:10px 15px;font-weight:700;cursor:pointer}
+button.active{background:#222;color:#fff;border-color:#222}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:20px;box-shadow:0 2px 10px #0000000a}
+table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid var(--line);padding:10px;text-align:center;vertical-align:middle}th{background:#faf9f6}.rowhead{text-align:left;font-weight:750;width:120px}
+.fields{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:82px}.fields.single{min-height:55px}
+input{width:112px;max-width:100%;padding:9px 6px;border:2px solid #bbb;border-radius:8px;font-size:17px;text-align:center;color:#111;background:#fff}
+input:focus{outline:3px solid #dbeafe;border-color:#2563eb}input.ok{border-color:var(--good);background:#eaf8f0;color:var(--good);font-weight:750}input.wrong{border-color:var(--bad);background:#fff0ee;color:var(--bad);font-weight:750}
+.dash{color:#999}.answer{font-size:18px;line-height:1.9}.er{color:var(--er);font-weight:800}.e{color:var(--e);font-weight:800}.es{color:var(--es);font-weight:800}.en{color:var(--en);font-weight:800}.em{color:var(--em);font-weight:800}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.check{background:#16784a;color:#fff;border-color:#16784a}.reset{background:#e9e5dc}.result{min-height:24px;margin-top:12px;font-weight:750}.goodtxt{color:var(--good)}.badtxt{color:var(--bad)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:#555}.section-title{margin-top:0}.table-wrap{overflow-x:auto}.compact-table{max-width:520px;margin:0 auto}.compact-table table{table-layout:auto}.compact-table th,.compact-table td{width:auto}
+@media(max-width:750px){th,td{padding:6px 3px}.rowhead{width:90px}.fields input,input{width:88px;font-size:15px}}
+
+/* --- Optimización móvil v16 --- */
+@media(max-width:700px){
+  main{margin:12px auto;padding:0 10px}
+  h1{font-size:25px}
+  h2{font-size:20px}
+  h3{font-size:16px}
+  .card{padding:12px;border-radius:12px}
+  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}
+  .tabs button{min-height:48px;padding:8px 7px;font-size:14px;line-height:1.15}
+  #exerciseMenu .tabs{grid-template-columns:1fr 1fr}
+  input{min-height:44px;font-size:17px;width:100px}
+  .fields{min-height:58px;gap:5px}
+  .fields.single{min-height:50px}
+  th,td{padding:7px 5px;font-size:14px}
+  .rowhead{width:82px}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .compact-table{max-width:100%}
+  .compact-table table{width:auto;min-width:310px;margin:0 auto}
+  .actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .actions button{min-height:48px;font-size:15px}
+  .note{font-size:13px;line-height:1.35}
+  /* Las tablas anchas siguen siendo tablas, pero con ancho mínimo legible
+     y desplazamiento horizontal suave. */
+  .table-wrap table{min-width:560px}
+  .compact-table table{min-width:310px}
+}
+@media(max-width:420px){
+  #exerciseMenu .tabs{grid-template-columns:1fr}
+  .tabs button{font-size:14px}
+}
+
+</style></head>
+<body><main>
+<h1>Deutsch Tabellen</h1>
+<div class="sub">Repaso básico de gramática alemana</div><div class="note">En el celular, las tablas anchas se pueden deslizar horizontalmente con el dedo.</div>
+<div class="card" id="exerciseMenu">
+<h2 class="section-title">¿Qué quieres practicar?</h2>
+<div class="tabs">
+<button id="exArticles" class="active" onclick="setExercise('articles')">1. Artículos</button>
+<button id="exPronouns" onclick="setExercise('pronouns')">2. Pronombres personales</button>
+<button id="exPossessives" onclick="setExercise('possessives')">3. Posesivos</button>
+<button id="exAdjectives" onclick="setExercise('adjectives')">4. Adjetivos — tabla</button>
+<button id="exAdjRule" onclick="setExercise('adjrule')">5. Adjetivos — regla por determinante</button>
+<button id="exPreps" onclick="setExercise('preps')">6. Preposiciones + caso</button>
+<button id="exVerbPreps" onclick="setExercise('verbpreps')">7. Verbos + preposición</button>
+<button id="exDativVerbs" onclick="setExercise('dativverbs')">8. Verbos con Dativ</button>
+</div>
+</div>
+<div class="tabs"><button id="practiceTab" class="active" onclick="setMode('practice')">Practicar</button><button id="referenceTab" onclick="setMode('reference')">Consultar tabla</button></div>
+<div id="content"></div>
+</main>
+<script>
+let mode="practice", exercise="articles";
+const cases=["Nominativ","Akkusativ","Dativ"], genders=["Maskulin","Neutrum","Feminin","Plural"];
+const articles={
+"Nominativ":{"Maskulin":["der","ein"],"Neutrum":["das","ein"],"Feminin":["die","eine"],"Plural":["die",""]},
+"Akkusativ":{"Maskulin":["den","einen"],"Neutrum":["das","ein"],"Feminin":["die","eine"],"Plural":["die",""]},
+"Dativ":{"Maskulin":["dem","einem"],"Neutrum":["dem","einem"],"Feminin":["der","einer"],"Plural":["den",""]}
+};
+const persons=["ich","du","er","sie","es","wir","ihr","sie / Sie"];
+const pronouns={
+"Akkusativ":["mich","dich","ihn","sie","es","uns","euch","sie / Sie"],
+"Dativ":["mir","dir","ihm","ihr","ihm","uns","euch","ihnen / Ihnen"]
+};
+const possessives=[
+["ich","mein"],["du","dein"],["er","sein"],["sie","ihr"],["es","sein"],
+["wir","unser"],["ihr","euer"],["sie","ihr"],["Sie","Ihr"]
+];
+const adjectiveEndings={
+"Nominativ":{"Maskulin":"-e","Neutrum":"-e","Feminin":"-e","Plural":"-en"},
+"Akkusativ":{"Maskulin":"-en","Neutrum":"-e","Feminin":"-e","Plural":"-en"},
+"Dativ":{"Maskulin":"-en","Neutrum":"-en","Feminin":"-en","Plural":"-en"}
+};
+const adjGroups=[
+["den · dem · der (Dativ/Genitiv) · die (Plural)","einen · einem · einer · eines","-en"],
+["der · die · das","eine","-e"],
+["—","ein + Maskulin (Nom.)","-er"],
+["—","ein + Neutrum (Nom./Akk.)","-es"]
+];
+const prepGroups=[
+["Akkusativ","durch · für · gegen · ohne · um"],
+["Dativ","aus · außer · bei · mit · nach · seit · von · zu · gegenüber"]
+];
+const wechsel=["an","auf","hinter","in","neben","über","unter","vor","zwischen"];
+
+const verbPreps=[
+["denken","an","Akk.","pensar en"],
+["denken / nachdenken","über","Akk.","pensar / reflexionar sobre"],
+["warten","auf","Akk.","esperar"],
+["sich erinnern","an","Akk.","acordarse de"],
+["sich interessieren","für","Akk.","interesarse por"],
+["sich freuen","auf","Akk.","esperar con ilusión algo futuro"],
+["sich freuen","über","Akk.","alegrarse por algo"],
+["sprechen","über","Akk.","hablar sobre"],
+["sprechen","mit","Dat.","hablar con"],
+["teilnehmen","an","Dat.","participar en"],
+["abhängen","von","Dat.","depender de"],
+["sich beschäftigen","mit","Dat.","ocuparse de / dedicarse a"],
+["anfangen","mit","Dat.","empezar con"],
+["bitten","um","Akk.","pedir algo"],
+["sich kümmern","um","Akk.","ocuparse de"],
+["Angst haben","vor","Dat.","tener miedo de"],
+["träumen","von","Dat.","soñar con"],
+["gehören","zu","Dat.","pertenecer a"]
+];
+
+const dativVerbs=[
+["helfen","ayudar"],["danken","agradecer"],["gefallen","gustar"],
+["gehören","pertenecer"],["schmecken","saber / gustar (comida)"],
+["antworten","responder"],["folgen","seguir"],["vertrauen","confiar en"],
+["fehlen","faltar"],["passen","quedar / venir bien"]
+];
+function colored(w){if(!w)return'<span class="dash">—</span>';const x={der:'d<span class="er">er</span>',das:'da<span class="es">s</span>',die:'di<span class="e">e</span>',den:'d<span class="en">en</span>',dem:'d<span class="em">em</span>',eine:'ein<span class="e">e</span>',einen:'ein<span class="en">en</span>',einem:'ein<span class="em">em</span>',einer:'ein<span class="er">er</span>'};return x[w]||w}
+function articleTable(){
+ let s='<div class="table-wrap"><table><tr><th>Kasus</th>'+genders.map(g=>`<th>${g}</th>`).join('')+'</tr>';
+ cases.forEach(c=>{s+=`<tr><td class="rowhead">${c}</td>`;genders.forEach(g=>{let p=articles[c][g]; if(mode==="practice")s+=`<td><div class="fields"><input data-kind="article" data-case="${c}" data-gender="${g}" data-p="0">${p[1]?`<input data-kind="article" data-case="${c}" data-gender="${g}" data-p="1">`:'<span class="dash">—</span>'}</div></td>`;else s+=`<td class="answer">${colored(p[0])}<br>${p[1]?colored(p[1]):'<span class="dash">—</span>'}</td>`});s+='</tr>'});return s+'</table></div>'
+}
+function pronounTable(){
+ let s='<div class="table-wrap"><table><tr><th>Person</th><th>Akkusativ</th><th>Dativ</th></tr>';
+ persons.forEach((p,i)=>{
+   s+=`<tr><td class="rowhead">${p}</td>`;
+   ["Akkusativ","Dativ"].forEach(c=>{
+     let a=pronouns[c][i];
+     s+=mode==="practice"
+       ?`<td><div class="fields single"><input data-kind="pronoun" data-case="${c}" data-i="${i}" data-order="${(c==="Akkusativ"?0:persons.length)+i}"></div></td>`
+       :`<td class="answer">${a}</td>`;
+   });
+   s+='</tr>';
+ });
+ return s+'</table></div>'
+}
+function possessiveTable(){
+ let s='<div class="table-wrap compact-table"><table><tr><th>Person</th><th>Possessivstamm</th></tr>';
+ possessives.forEach((p,i)=>{
+   s+=`<tr><td class="rowhead">${p[0]}</td>`;
+   s+=mode==="practice"
+     ?`<td><div class="fields single"><input data-kind="possessive" data-i="${i}"></div></td>`
+     :`<td class="answer">${p[1]}</td>`;
+   s+='</tr>';
+ });
+ return s+'</table></div>';
+}
+function adjectiveTable(){
+ let s='<div class="table-wrap"><table><tr><th>Kasus</th>'+genders.map(g=>`<th>${g}</th>`).join('')+'</tr>';
+ cases.forEach(c=>{
+   s+=`<tr><td class="rowhead">${c}</td>`;
+   genders.forEach(g=>{
+     let a=adjectiveEndings[c][g];
+     s+=mode==="practice"
+       ?`<td><div class="fields single"><input data-kind="adjective" data-case="${c}" data-gender="${g}" placeholder="-?"></div></td>`
+       :`<td class="answer">${a}</td>`;
+   });
+   s+='</tr>';
+ });
+ return s+'</table></div>';
+}
+function adjRuleTable(){
+ let a='<h3>A. Te doy los determinantes → escribe la terminación del adjetivo</h3>';
+ a+='<div class="table-wrap"><table><tr><th>Formas tipo der/die/das</th><th>Formas tipo ein/eine</th><th>Terminación del adjetivo</th></tr>';
+ adjGroups.forEach((r,i)=>{
+   a+=`<tr><td class="answer">${r[0]}</td><td class="answer">${r[1]}</td>`;
+   a+=mode==="practice"
+     ?`<td><div class="fields single"><input data-kind="adjending" data-i="${i}" placeholder="-?"></div></td>`
+     :`<td class="answer">${r[2]}</td>`;
+   a+='</tr>';
+ });
+ a+='</table></div>';
+
+ let b='<h3 style="margin-top:28px">B. Te doy la terminación → escribe los determinantes</h3>';
+ b+='<div class="table-wrap"><table><tr><th>Terminación del adjetivo</th><th>Formas tipo der/die/das</th><th>Formas tipo ein/eine</th></tr>';
+ adjGroups.forEach((r,i)=>{
+   b+=`<tr><td class="rowhead">${r[2]}</td>`;
+   [0,1].forEach(j=>{
+     b+=mode==="practice"
+       ?`<td><div class="fields single"><input style="width:240px" data-kind="adjarticles" data-i="${i}" data-j="${j}"></div></td>`
+       :`<td class="answer">${r[j]}</td>`;
+   });
+   b+='</tr>';
+ });
+ b+='</table></div>';
+ return a+b;
+}
+
+function prepTable(){
+ let a='<h3>A. Preposiciones que exigen siempre un caso</h3>';
+ a+='<div class="table-wrap compact-table"><table><tr><th>Caso</th><th>Preposiciones</th></tr>';
+ prepGroups.forEach((r,i)=>{
+   a+=`<tr><td class="rowhead">${r[0]}</td>`;
+   a+=mode==="practice"
+     ?`<td><div class="fields single"><input style="width:360px" data-kind="prepgroup" data-i="${i}"></div></td>`
+     :`<td class="answer">${r[1]}</td>`;
+   a+='</tr>';
+ });
+ a+='</table></div>';
+
+ let b='<h3 style="margin-top:28px">B. Wechselpräpositionen</h3>';
+ b+='<div class="table-wrap"><table><tr><th>Preposiciones</th><th>Pregunta</th><th>Caso</th></tr>';
+ b+=`<tr><td class="answer" rowspan="2">${wechsel.join(" · ")}</td><td>Wo? (posición)</td>`;
+ b+=mode==="practice"?`<td><div class="fields single"><input data-kind="wechselcase" data-answer="Dativ"></div></td>`:`<td class="answer">Dativ</td>`;
+ b+='</tr><tr><td>Wohin? (dirección)</td>';
+ b+=mode==="practice"?`<td><div class="fields single"><input data-kind="wechselcase" data-answer="Akkusativ"></div></td>`:`<td class="answer">Akkusativ</td>`;
+ b+='</tr></table></div>';
+ return a+b;
+}
+
+function verbPrepTable(){
+ let s='<div class="table-wrap"><table><tr><th>Verbo</th><th>Preposición</th><th>Caso</th><th>Idea</th></tr>';
+ verbPreps.forEach((r,i)=>{
+   s+=`<tr><td class="rowhead">${r[0]}</td>`;
+   if(mode==="practice"){
+     s+=`<td><div class="fields single"><input data-kind="verbprep" data-i="${i}" data-j="1"></div></td>`;
+     s+=`<td><div class="fields single"><input data-kind="verbprep" data-i="${i}" data-j="2"></div></td>`;
+   }else{
+     s+=`<td class="answer">${r[1]}</td><td class="answer">${r[2]}</td>`;
+   }
+   s+=`<td>${r[3]}</td></tr>`;
+ });
+ return s+'</table></div>';
+}
+
+function dativVerbTable(){
+ let s='<div class="table-wrap compact-table"><table><tr><th>Verbo</th><th>Significado</th></tr>';
+ dativVerbs.forEach((r,i)=>{
+   if(mode==="practice"){
+     s+=`<tr><td><div class="fields single"><input data-kind="dativverb" data-i="${i}"></div></td><td>${r[1]}</td></tr>`;
+   }else{
+     s+=`<tr><td class="answer">${r[0]}</td><td>${r[1]}</td></tr>`;
+   }
+ });
+ return s+'</table></div>';
+}
+function render(){
+ let table="", heading="", note="";
+ if(exercise==="articles"){
+   heading="1. Artículos";
+   note="Casos en filas · Géneros en columnas";
+   table=articleTable();
+ }else if(exercise==="pronouns"){
+   heading="2. Pronombres personales";
+   note="Tab y Enter: primero todo Akkusativ de arriba abajo y después todo Dativ.";
+   table=pronounTable();
+ }else if(exercise==="possessives"){
+   heading="3. Posesivos";
+   note="Primero memorizamos qué posesivo corresponde a cada persona.";
+   table=possessiveTable();
+ }else if(exercise==="adjectives"){
+   heading="4. Terminaciones del adjetivo — tabla tradicional";
+   note="Después de artículo definido: casos en filas · géneros en columnas.";
+   table=adjectiveTable();
+ }else if(exercise==="adjrule"){
+   heading="5. Terminaciones del adjetivo — regla por determinante";
+   note="Basado en tu tabla: primero -en, luego -e, -er y -es. Practicamos en las dos direcciones.";
+   table=adjRuleTable();
+ }else if(exercise==="preps"){
+   heading="6. Preposiciones + caso";
+   note="Primero las preposiciones de caso fijo; después las Wechselpräpositionen: Wo? = Dativ, Wohin? = Akkusativ.";
+   table=prepTable();
+ }else if(exercise==="verbpreps"){
+   heading="7. Verbos + preposición + caso";
+   note="Completa la preposición y el caso que exige cada combinación verbal.";
+   table=verbPrepTable();
+ }else{
+   heading="8. Verbos con Dativ";
+   note="Completa el verbo que exige un objeto en Dativ.";
+   table=dativVerbTable();
+ }
+ let controls=mode==="practice"?`<div class="actions"><button class="check" onclick="check()">✓ Comprobar respuestas</button><button class="reset" onclick="render()">↻ Borrar y empezar de nuevo</button></div><div id="result" class="result"></div><div class="note">Los aciertos quedan fijados. Los errores se borran para que puedas intentarlos otra vez.</div>`:"";
+ content.innerHTML=`<section class="card"><h2 class="section-title">${heading}</h2><p class="note">${note}</p>${table}${controls}</section>`;
+ // Orden nativo del foco para Android: género completo antes de pasar al siguiente.
+ if(exercise==="articles" && mode==="practice"){
+   const xs=[...document.querySelectorAll('#content input[data-kind="article"]')];
+   const gs=["Maskulin","Neutrum","Feminin","Plural"];
+   const cs=["Nominativ","Akkusativ","Dativ"];
+   let tab=1;
+   gs.forEach(g=>cs.forEach(c=>{
+     xs.filter(x=>x.dataset.gender===g && x.dataset.case===c)
+       .sort((a,b)=>(+a.dataset.p)-(+b.dataset.p))
+       .forEach(x=>x.tabIndex=tab++);
+   }));
+ }
+ if(mode==="reference" && exercise==="articles") content.innerHTML+=`<div class="legend"><span>Terminaciones: <b class="er">-er</b></span><span><b class="e">-e</b></span><span><b class="es">-s</b></span><span><b class="en">-en</b></span><span><b class="em">-em</b></span></div>`;
+}
+function expected(i){
+ if(i.dataset.kind==="article") return articles[i.dataset.case][i.dataset.gender][+i.dataset.p];
+ if(i.dataset.kind==="pronoun") return pronouns[i.dataset.case][+i.dataset.i];
+ if(i.dataset.kind==="possessive") return possessives[+i.dataset.i][1];
+ if(i.dataset.kind==="adjective") return adjectiveEndings[i.dataset.case][i.dataset.gender];
+ if(i.dataset.kind==="adjending") return adjGroups[+i.dataset.i][2];
+ if(i.dataset.kind==="adjarticles") return adjGroups[+i.dataset.i][+i.dataset.j];
+ if(i.dataset.kind==="prepgroup") return prepGroups[+i.dataset.i][1];
+ if(i.dataset.kind==="wechselcase") return i.dataset.answer;
+ if(i.dataset.kind==="verbprep") return verbPreps[+i.dataset.i][+i.dataset.j];
+ if(i.dataset.kind==="dativverb") return dativVerbs[+i.dataset.i][0];
+ return "";
+}
+function norm(s){return s.trim().replace(/^[-–—]/,"").replace(/[;·]+/g,",").replace(/\s*,\s*/g,",").replace(/\s+/g," ").replace(/akk\.?$/,"akkusativ").replace(/dat\.?$/,"dativ").toLowerCase()}
+function check(){let good=0,bad=0,blank=0,first=null;document.querySelectorAll('input').forEach(i=>{if(i.disabled){good++;return}let v=norm(i.value);if(!v){blank++;return}let exp=norm(expected(i));if(v===exp){i.className='ok';i.disabled=true;good++}else{bad++;i.className='wrong';if(!first)first=i;setTimeout(()=>{i.value='';i.className='';if(i===first)i.focus()},650)}});let r=document.getElementById('result');if(!bad&&!blank){r.className='result goodtxt';r.textContent='¡Todo completo y correcto!'}else if(bad){r.className='result badtxt';r.textContent=`${good} correctas · ${bad} incorrectas · ${blank} vacías.`}else{r.className='result';r.textContent=`${good} correctas · ${blank} todavía vacías.`}}
+
+function nextPracticeInput(current){
+ const inputs=[...document.querySelectorAll('input:not(:disabled)')];
+ if(current.dataset.kind==="pronoun"){
+   const pronounsOnly=inputs.filter(x=>x.dataset.kind==="pronoun")
+     .sort((a,b)=>Number(a.dataset.order)-Number(b.dataset.order));
+   const pos=pronounsOnly.indexOf(current);
+   if(pos>=0 && pos<pronounsOnly.length-1) return pronounsOnly[pos+1];
+ }
+ const pos=inputs.indexOf(current);
+ return pos>=0 && pos<inputs.length-1 ? inputs[pos+1] : null;
+}
+document.addEventListener("keydown",e=>{
+ const el=e.target;
+ if(!(el instanceof HTMLInputElement) || !el.closest("#content")) return;
+
+ // Pronombres: conservar el recorrido vertical ya definido.
+ if(exercise==="pronouns" && (e.key==="Enter" || e.key==="Tab")){
+   e.preventDefault();
+   const xs=[...document.querySelectorAll('#content input[data-kind="pronoun"]')];
+   const ordered=[
+     ...xs.filter(x=>x.dataset.col==="akk"),
+     ...xs.filter(x=>x.dataset.col==="dat")
+   ];
+   let n=ordered.indexOf(el)+(e.shiftKey?-1:1);
+   if(n>=0 && n<ordered.length) ordered[n].focus();
+   return;
+ }
+
+ // Artículos: en móvil Enter baja por el mismo género:
+ // Nom/Mask → Akk/Mask → Dat/Mask → Nom/Neutro...
+ if(exercise==="articles" && (e.key==="Enter" || e.key==="Tab")){
+   e.preventDefault();
+   const xs=[...document.querySelectorAll('#content input[data-kind="article"]')];
+   const articleGenders=["Maskulin","Neutrum","Feminin","Plural"];
+   const articleCases=["Nominativ","Akkusativ","Dativ"];
+   const ordered=[];
+   articleGenders.forEach(g=>articleCases.forEach(c=>{
+     // Dentro de cada casilla conserva el orden: artículo definido → indefinido.
+     xs.filter(x=>x.dataset.gender===g && x.dataset.case===c)
+       .sort((a,b)=>(+a.dataset.p)-(+b.dataset.p))
+       .forEach(x=>ordered.push(x));
+   }));
+   let n=ordered.indexOf(el)+1;
+   if(n<ordered.length) ordered[n].focus();
+   return;
+ }
+
+ // En el resto de ejercicios, Enter avanza al siguiente campo visible.
+ if(e.key==="Enter"){
+   e.preventDefault();
+   const xs=[...document.querySelectorAll('#content input:not(:disabled)')];
+   const n=xs.indexOf(el)+1;
+   if(n<xs.length) xs[n].focus();
+ }
+});
+
+function setExercise(e){
+ exercise=e;
+ exArticles.classList.toggle("active",e==="articles");
+ exPronouns.classList.toggle("active",e==="pronouns");
+ exPossessives.classList.toggle("active",e==="possessives");
+ exAdjectives.classList.toggle("active",e==="adjectives");
+ exAdjRule.classList.toggle("active",e==="adjrule");
+ exPreps.classList.toggle("active",e==="preps");
+ exVerbPreps.classList.toggle("active",e==="verbpreps");
+ exDativVerbs.classList.toggle("active",e==="dativverbs");
+ render();
+}
+function setMode(m){mode=m;practiceTab.classList.toggle('active',m==="practice");referenceTab.classList.toggle('active',m==="reference");render()}
+render();
+</script></body></html>
