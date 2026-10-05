@@ -49,7 +49,15 @@ input:focus{outline:3px solid #dbeafe;border-color:#2563eb}input.ok{border-color
   .tabs button{font-size:14px}
 }
 
-</style></head>
+</style><style>
+/* Colores de fondo por terminación en las tablas de adjetivos */
+.adj-bg-e  { background:#fde8e8 !important; }
+.adj-bg-en { background:#fff0d9 !important; }
+.adj-bg-er { background:#e5efff !important; }
+.adj-bg-es { background:#e5f5e8 !important; }
+.adj-bg-em { background:#eee7fa !important; }
+</style>
+</head>
 <body><main>
 <h1>Deutsch Tabellen</h1>
 <div class="sub">Repaso básico de gramática alemana</div><div class="note">En el celular, las tablas anchas se pueden deslizar horizontalmente con el dedo.</div>
@@ -77,10 +85,10 @@ const articles={
 "Akkusativ":{"Maskulin":["den","einen"],"Neutrum":["das","ein"],"Feminin":["die","eine"],"Plural":["die",""]},
 "Dativ":{"Maskulin":["dem","einem"],"Neutrum":["dem","einem"],"Feminin":["der","einer"],"Plural":["den",""]}
 };
-const persons=["ich","du","er","sie","es","wir","ihr","sie / Sie"];
+const persons=["ich","du","er","sie","es","wir","ihr","sie","Sie"];
 const pronouns={
-"Akkusativ":["mich","dich","ihn","sie","es","uns","euch","sie / Sie"],
-"Dativ":["mir","dir","ihm","ihr","ihm","uns","euch","ihnen / Ihnen"]
+"Akkusativ":["mich","dich","ihn","sie","es","uns","euch","sie","Sie"],
+"Dativ":["mir","dir","ihm","ihr","ihm","uns","euch","ihnen","Ihnen"]
 };
 const possessives=[
 ["ich","mein"],["du","dein"],["er","sein"],["sie","ihr"],["es","sein"],
@@ -89,6 +97,11 @@ const possessives=[
 const adjectiveEndings={
 "Nominativ":{"Maskulin":"-e","Neutrum":"-e","Feminin":"-e","Plural":"-en"},
 "Akkusativ":{"Maskulin":"-en","Neutrum":"-e","Feminin":"-e","Plural":"-en"},
+"Dativ":{"Maskulin":"-en","Neutrum":"-en","Feminin":"-en","Plural":"-en"}
+};
+const adjectiveEinEndings={
+"Nominativ":{"Maskulin":"-er","Neutrum":"-es","Feminin":"-e","Plural":"-en"},
+"Akkusativ":{"Maskulin":"-en","Neutrum":"-es","Feminin":"-e","Plural":"-en"},
 "Dativ":{"Maskulin":"-en","Neutrum":"-en","Feminin":"-en","Plural":"-en"}
 };
 const adjGroups=[
@@ -161,18 +174,25 @@ function possessiveTable(){
  return s+'</table></div>';
 }
 function adjectiveTable(){
- let s='<div class="table-wrap"><table><tr><th>Kasus</th>'+genders.map(g=>`<th>${g}</th>`).join('')+'</tr>';
- cases.forEach(c=>{
-   s+=`<tr><td class="rowhead">${c}</td>`;
+ function oneTable(data,kind,title,pluralTitle="Plural"){
+  let t=`<h3>${title}</h3><div class="table-wrap"><table><tr><th>Kasus</th>`;
+  t+=["Maskulin","Neutrum","Feminin",pluralTitle].map(g=>`<th>${g}</th>`).join("")+"</tr>";
+  cases.forEach(c=>{
+   t+=`<tr><td class="rowhead">${c}</td>`;
    genders.forEach(g=>{
-     let a=adjectiveEndings[c][g];
-     s+=mode==="practice"
-       ?`<td><div class="fields single"><input data-kind="adjective" data-case="${c}" data-gender="${g}" placeholder="-?"></div></td>`
-       :`<td class="answer">${a}</td>`;
+    let a=data[c][g];
+    const bg="adj-bg-"+a.replace("-","");
+    t+=mode==="practice"
+      ?`<td class="${bg}"><div class="fields single"><input data-kind="${kind}" data-case="${c}" data-gender="${g}" placeholder="-?"></div></td>`
+      :`<td class="answer ${bg}">${a}</td>`;
    });
-   s+='</tr>';
- });
- return s+'</table></div>';
+   t+="</tr>";
+  });
+  return t+"</table></div>";
+ }
+ return oneTable(adjectiveEndings,"adjective","A. Después de artículo definido (der-Wörter)")
+   + `<div style="height:18px"></div>`
+   + oneTable(adjectiveEinEndings,"adjectiveein","B. Después de artículo indeterminado / ein-Wörter","Plural*");
 }
 function adjRuleTable(){
  let a='<h3>A. Te doy los determinantes → escribe la terminación del adjetivo</h3>';
@@ -264,8 +284,8 @@ function render(){
    note="Primero memorizamos qué posesivo corresponde a cada persona.";
    table=possessiveTable();
  }else if(exercise==="adjectives"){
-   heading="4. Terminaciones del adjetivo — tabla tradicional";
-   note="Después de artículo definido: casos en filas · géneros en columnas.";
+   heading="4. Terminaciones del adjetivo — tablas tradicionales";
+   note="Artículo definido y ein-Wörter. *En plural: meine, deine, keine, etc.; ein no tiene plural.";
    table=adjectiveTable();
  }else if(exercise==="adjrule"){
    heading="5. Terminaciones del adjetivo — regla por determinante";
@@ -314,6 +334,7 @@ function expected(i){
  if(i.dataset.kind==="pronoun") return pronouns[i.dataset.case][+i.dataset.i];
  if(i.dataset.kind==="possessive") return possessives[+i.dataset.i][1];
  if(i.dataset.kind==="adjective") return adjectiveEndings[i.dataset.case][i.dataset.gender];
+ if(i.dataset.kind==="adjectiveein") return adjectiveEinEndings[i.dataset.case][i.dataset.gender];
  if(i.dataset.kind==="adjending") return adjGroups[+i.dataset.i][2];
  if(i.dataset.kind==="adjarticles") return adjGroups[+i.dataset.i][+i.dataset.j];
  if(i.dataset.kind==="prepgroup") return prepGroups[+i.dataset.i][1];
@@ -395,4 +416,4 @@ function setExercise(e){
 }
 function setMode(m){mode=m;practiceTab.classList.toggle('active',m==="practice");referenceTab.classList.toggle('active',m==="reference");render()}
 render();
-</script></body></html>
+</script><div style="text-align:center;color:#777;font-size:12px;padding:18px 8px 28px">Deutsch Trainer · Versión 24</div>\n</body></html>
