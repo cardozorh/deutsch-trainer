@@ -56,6 +56,7 @@ input:focus{outline:3px solid #dbeafe;border-color:#2563eb}input.ok{border-color
 .adj-bg-er { background:#e5efff !important; }
 .adj-bg-es { background:#e5f5e8 !important; }
 .adj-bg-em { background:#eee7fa !important; }
+.reflexive-different { background:#fff6bf !important; font-weight:800; }
 </style>
 </head>
 <body><main>
@@ -66,12 +67,13 @@ input:focus{outline:3px solid #dbeafe;border-color:#2563eb}input.ok{border-color
 <div class="tabs">
 <button id="exArticles" class="active" onclick="setExercise('articles')">1. Artículos</button>
 <button id="exPronouns" onclick="setExercise('pronouns')">2. Pronombres personales</button>
-<button id="exPossessives" onclick="setExercise('possessives')">3. Posesivos</button>
-<button id="exAdjectives" onclick="setExercise('adjectives')">4. Adjetivos — tabla</button>
-<button id="exAdjRule" onclick="setExercise('adjrule')">5. Adjetivos — regla por determinante</button>
-<button id="exPreps" onclick="setExercise('preps')">6. Preposiciones + caso</button>
-<button id="exVerbPreps" onclick="setExercise('verbpreps')">7. Verbos + preposición</button>
-<button id="exDativVerbs" onclick="setExercise('dativverbs')">8. Verbos con Dativ</button>
+<button id="exReflexives" onclick="setExercise('reflexives')">3. Pronombres reflexivos</button>
+<button id="exPossessives" onclick="setExercise('possessives')">4. Posesivos</button>
+<button id="exAdjectives" onclick="setExercise('adjectives')">5. Adjetivos — tabla</button>
+<button id="exAdjRule" onclick="setExercise('adjrule')">6. Adjetivos — regla por determinante</button>
+<button id="exPreps" onclick="setExercise('preps')">7. Preposiciones + caso</button>
+<button id="exVerbPreps" onclick="setExercise('verbpreps')">8. Verbos + preposición</button>
+<button id="exDativVerbs" onclick="setExercise('dativverbs')">9. Verbos con Dativ</button>
 </div>
 </div>
 <div class="tabs"><button id="practiceTab" class="active" onclick="setMode('practice')">Practicar</button><button id="referenceTab" onclick="setMode('reference')">Consultar tabla</button></div>
@@ -89,6 +91,10 @@ const persons=["ich","du","er","sie","es","wir","ihr","sie","Sie"];
 const pronouns={
 "Akkusativ":["mich","dich","ihn","sie","es","uns","euch","sie","Sie"],
 "Dativ":["mir","dir","ihm","ihr","ihm","uns","euch","ihnen","Ihnen"]
+};
+const reflexives={
+"Akkusativ":["mich","dich","sich","sich","sich","uns","euch","sich","sich"],
+"Dativ":["mir","dir","sich","sich","sich","uns","euch","sich","sich"]
 };
 const possessives=[
 ["ich","mein"],["du","dein"],["er","sein"],["sie","ihr"],["es","sein"],
@@ -161,6 +167,23 @@ function pronounTable(){
    s+='</tr>';
  });
  return s+'</table></div>'
+}
+function reflexiveTable(){
+ let s='<div class="table-wrap"><table><tr><th>Person</th><th>Akkusativ</th><th>Dativ</th></tr>';
+ persons.forEach((p,i)=>{
+   s+=`<tr><td class="rowhead">${p}</td>`;
+   ["Akkusativ","Dativ"].forEach(c=>{
+     let a=reflexives[c][i];
+     if(mode==="practice"){
+       s+=`<td><div class="fields single"><input data-kind="reflexive" data-case="${c}" data-i="${i}" data-order="${(c==="Akkusativ"?0:persons.length)+i}"></div></td>`;
+     }else{
+       const cls=a==="sich" ? "answer reflexive-different" : "answer";
+       s+=`<td class="${cls}">${a}</td>`;
+     }
+   });
+   s+='</tr>';
+ });
+ return s+'</table></div>';
 }
 function possessiveTable(){
  let s='<div class="table-wrap compact-table"><table><tr><th>Person</th><th>Possessivstamm</th></tr>';
@@ -279,28 +302,32 @@ function render(){
    heading="2. Pronombres personales";
    note="Tab y Enter: primero todo Akkusativ de arriba abajo y después todo Dativ.";
    table=pronounTable();
+ }else if(exercise==="reflexives"){
+   heading="3. Pronombres reflexivos";
+   note="Tab y Enter: primero todo Akkusativ de arriba abajo y después todo Dativ. En Consultar tabla, el amarillo marca las formas reflexivas que son diferentes de los pronombres personales.";
+   table=reflexiveTable();
  }else if(exercise==="possessives"){
-   heading="3. Posesivos";
+   heading="4. Posesivos";
    note="Primero memorizamos qué posesivo corresponde a cada persona.";
    table=possessiveTable();
  }else if(exercise==="adjectives"){
-   heading="4. Terminaciones del adjetivo — tablas tradicionales";
+   heading="5. Terminaciones del adjetivo — tablas tradicionales";
    note="Artículo definido y ein-Wörter. *En plural: meine, deine, keine, etc.; ein no tiene plural.";
    table=adjectiveTable();
  }else if(exercise==="adjrule"){
-   heading="5. Terminaciones del adjetivo — regla por determinante";
+   heading="6. Terminaciones del adjetivo — regla por determinante";
    note="Basado en tu tabla: primero -en, luego -e, -er y -es. Practicamos en las dos direcciones.";
    table=adjRuleTable();
  }else if(exercise==="preps"){
-   heading="6. Preposiciones + caso";
+   heading="7. Preposiciones + caso";
    note="Primero las preposiciones de caso fijo; después las Wechselpräpositionen: Wo? = Dativ, Wohin? = Akkusativ.";
    table=prepTable();
  }else if(exercise==="verbpreps"){
-   heading="7. Verbos + preposición + caso";
+   heading="8. Verbos + preposición + caso";
    note="Completa la preposición y el caso que exige cada combinación verbal.";
    table=verbPrepTable();
  }else{
-   heading="8. Verbos con Dativ";
+   heading="9. Verbos con Dativ";
    note="Completa el verbo que exige un objeto en Dativ.";
    table=dativVerbTable();
  }
@@ -314,6 +341,15 @@ function render(){
      ...px.filter(x=>x.dataset.case==="Dativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i))
    ];
    po.forEach((x,i)=>x.tabIndex=i+1);
+ }
+
+ if(exercise==="reflexives" && mode==="practice"){
+   const rx=[...document.querySelectorAll('#content input[data-kind="reflexive"]')];
+   const ro=[
+     ...rx.filter(x=>x.dataset.case==="Akkusativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i)),
+     ...rx.filter(x=>x.dataset.case==="Dativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i))
+   ];
+   ro.forEach((x,i)=>x.tabIndex=i+1);
  }
 
  if(exercise==="articles" && mode==="practice"){
@@ -332,6 +368,7 @@ function render(){
 function expected(i){
  if(i.dataset.kind==="article") return articles[i.dataset.case][i.dataset.gender][+i.dataset.p];
  if(i.dataset.kind==="pronoun") return pronouns[i.dataset.case][+i.dataset.i];
+ if(i.dataset.kind==="reflexive") return reflexives[i.dataset.case][+i.dataset.i];
  if(i.dataset.kind==="possessive") return possessives[+i.dataset.i][1];
  if(i.dataset.kind==="adjective") return adjectiveEndings[i.dataset.case][i.dataset.gender];
  if(i.dataset.kind==="adjectiveein") return adjectiveEinEndings[i.dataset.case][i.dataset.gender];
@@ -374,6 +411,19 @@ document.addEventListener("keydown",e=>{
    return;
  }
 
+ // Reflexivos: primero Akkusativ completo y después Dativ.
+ if(exercise==="reflexives" && (e.key==="Enter" || e.key==="Tab")){
+   e.preventDefault();
+   const xs=[...document.querySelectorAll('#content input[data-kind="reflexive"]')];
+   const ordered=[
+     ...xs.filter(x=>x.dataset.case==="Akkusativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i)),
+     ...xs.filter(x=>x.dataset.case==="Dativ").sort((a,b)=>(+a.dataset.i)-(+b.dataset.i))
+   ];
+   let n=ordered.indexOf(el)+(e.shiftKey?-1:1);
+   if(n>=0 && n<ordered.length) ordered[n].focus();
+   return;
+ }
+
  // Artículos: en móvil Enter baja por el mismo género:
  // Nom/Mask → Akk/Mask → Dat/Mask → Nom/Neutro...
  if(exercise==="articles" && (e.key==="Enter" || e.key==="Tab")){
@@ -406,6 +456,7 @@ function setExercise(e){
  exercise=e;
  exArticles.classList.toggle("active",e==="articles");
  exPronouns.classList.toggle("active",e==="pronouns");
+ exReflexives.classList.toggle("active",e==="reflexives");
  exPossessives.classList.toggle("active",e==="possessives");
  exAdjectives.classList.toggle("active",e==="adjectives");
  exAdjRule.classList.toggle("active",e==="adjrule");
@@ -416,4 +467,4 @@ function setExercise(e){
 }
 function setMode(m){mode=m;practiceTab.classList.toggle('active',m==="practice");referenceTab.classList.toggle('active',m==="reference");render()}
 render();
-</script><div style="text-align:center;color:#777;font-size:12px;padding:18px 8px 28px">Deutsch Trainer · Versión 24</div>\n</body></html>
+</script><div style="text-align:center;color:#777;font-size:12px;padding:18px 8px 28px">Deutsch Trainer · Versión 25</div>\n</body></html>
