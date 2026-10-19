@@ -16,14 +16,48 @@ input.wide{width:145px}input.good{border-color:var(--green);background:#eaf8f0}i
 .phrase{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.answer{color:#1359a6;font-weight:750}.translation{color:#777;font-size:13px;margin-top:5px}
 .feedback{font-size:13px;color:var(--red);margin-top:6px}.score{font-weight:750;margin-left:auto}.small{font-size:13px;color:#666}
 @media(max-width:650px){.rule{grid-template-columns:1fr}th:first-child{width:105px}th,td{padding:8px 5px}input{width:76px}input.wide{width:120px}.card{padding:12px}}
-</style></head><body><main>
+.tree-shell{background:#141719;color:#42c7ff;border-radius:12px;padding:20px 12px;overflow-x:auto}.tree-shell svg{display:block;width:100%;min-width:680px;height:auto;font:15px ui-monospace,SFMono-Regular,Consolas,monospace}.tree-shell svg .line{fill:none;stroke:#42c7ff;stroke-width:1.7}.tree-shell svg .node{fill:#42c7ff}.tree-shell svg .accent{fill:#ff6565}.tree-shell svg .note{fill:#b8d7e5;font-size:13px}.tree-shell svg .arrow{fill:#42c7ff}.tree-caption{font-size:13px;color:#666;margin-top:10px}</style></head><body><main>
 <h1>Werden – Entrenamiento</h1>
 <p class="muted">Aprende las estructuras del verbo <strong>werden</strong> con espacios en blanco. No necesitas construir oraciones: completa solo las formas verbales.</p>
 <section class="card"><h2>Antes de comenzar: worden y geworden</h2><div class="rule">
 <div><strong>GEWORDEN = cambio de estado</strong><p>Cuando <em>werden</em> significa hacerse, volverse o convertirse.</p><strong>Er ist müde geworden.</strong><div class="translation">Se ha cansado.</div></div>
 <div><strong>WORDEN = pasiva</strong><p>Cuando <em>werden</em> es el auxiliar de la voz pasiva.</p><strong>Er ist informiert worden.</strong><div class="translation">Ha sido informado.</div></div></div>
 <p class="small">Ambas son formas del Partizip II de <em>werden</em>. En los tiempos compuestos de cambio de estado se utiliza <strong>sein</strong>, no <em>haben</em>.</p></section>
-<section class="card"><h2>Ejercicios</h2>
+<section class="card" id="arbol-werden"><h2>Árbol de decisión: ¿qué función cumple werden?</h2><p class="muted">Sigue las líneas y flechas para reconocer la estructura de la oración.</p>
+<div class="tree-shell" role="img" aria-label="Árbol de decisión. Si werden acompaña a adjetivo o sustantivo y expresa cambio, es verbo principal. Si aparece con participio II, puede ser pasiva de proceso. Con infinitivo puede ser futuro o conjetura. Würde más infinitivo es Konjunktiv II. En tiempos compuestos, geworden expresa cambio y worden pasiva.">
+<svg viewBox="0 0 980 550" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arrw" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" class="arrow"/></marker></defs>
+<text x="490" y="35" text-anchor="middle" font-weight="bold" font-size="19" class="node">¿QUÉ ESTRUCTURA ACOMPAÑA A WERDEN?</text>
+<path d="M490 48 V70 H165 V100 M490 70 H490 V100 M490 70 H815 V100" class="line" marker-end="url(#arrw)"/>
+<text x="165" y="91" text-anchor="middle" class="node">ADJETIVO / SUSTANTIVO</text>
+<text x="490" y="91" text-anchor="middle" class="node">PARTIZIP II</text>
+<text x="815" y="91" text-anchor="middle" class="node">INFINITIVO</text>
+<path d="M165 110 V154 M490 110 V154 M815 110 V154" class="line" marker-end="url(#arrw)"/>
+<text x="165" y="182" text-anchor="middle" class="accent">1. VERBO PRINCIPAL</text>
+<text x="165" y="205" text-anchor="middle" class="note">Cambio de estado</text>
+<text x="165" y="231" text-anchor="middle" class="node">Er wird müde.</text>
+<text x="165" y="251" text-anchor="middle" class="note">Se está cansando.</text>
+<text x="490" y="182" text-anchor="middle" class="accent">2. PASIVA DE PROCESO</text>
+<text x="490" y="205" text-anchor="middle" class="note">Acción recibida</text>
+<text x="490" y="231" text-anchor="middle" class="node">Das Haus wird gebaut.</text>
+<text x="490" y="251" text-anchor="middle" class="note">La casa está siendo construida.</text>
+<text x="815" y="182" text-anchor="middle" class="accent">3. FUTURO / CONJETURA</text>
+<text x="815" y="205" text-anchor="middle" class="note">werden + infinitivo</text>
+<text x="815" y="231" text-anchor="middle" class="node">Er wird kommen.</text>
+<text x="815" y="251" text-anchor="middle" class="note">Vendrá / probablemente venga.</text>
+<path d="M815 269 V299" class="line" marker-end="url(#arrw)"/>
+<text x="815" y="324" text-anchor="middle" class="accent">4. KONJUNKTIV II</text>
+<text x="815" y="348" text-anchor="middle" class="node">Ich würde kommen.</text>
+<text x="815" y="370" text-anchor="middle" class="note">Yo vendría.</text>
+<path d="M165 270 V410 M490 270 V410" class="line" marker-end="url(#arrw)"/>
+<text x="165" y="438" text-anchor="middle" class="accent">GEWORDEN</text>
+<text x="165" y="463" text-anchor="middle" class="node">Er ist müde geworden.</text>
+<text x="165" y="486" text-anchor="middle" class="note">Cambio de estado (Perfekt)</text>
+<text x="490" y="438" text-anchor="middle" class="accent">WORDEN</text>
+<text x="490" y="463" text-anchor="middle" class="node">Er ist informiert worden.</text>
+<text x="490" y="486" text-anchor="middle" class="note">Pasiva (Perfekt)</text>
+<text x="490" y="532" text-anchor="middle" class="note">Observa la construcción completa; estas son pistas, no reglas aisladas.</text>
+</svg></div><p class="tree-caption">Importante: en <em>Er wird alt werden</em>, el infinitivo <em>werden</em> expresa cambio de estado en Futur I; en <em>Es wird gemacht werden</em>, el infinitivo final forma parte de una pasiva en Futur I.</p></section><section class="card"><h2>Ejercicios</h2>
 <div id="tabs" class="tabs" role="tablist" aria-label="Bloques de entrenamiento"></div>
 <p id="description" class="muted"></p>
 <div class="toolbar"><button id="consult">Consultar</button><button id="practice" class="active">Practicar</button><button id="check" class="primary">Comprobar</button><button id="clear">Borrar</button><span id="score" class="score" aria-live="polite"></span></div>
