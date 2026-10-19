@@ -10,7 +10,7 @@ main{max-width:1080px;margin:28px auto;padding:0 18px}h1{margin:0 0 6px}p{line-h
 button,select{font:inherit;border:1px solid #bdb6aa;border-radius:9px;padding:10px 14px;background:#ebe7df;cursor:pointer}
 button.active,button.primary{background:#222;color:white;border-color:#222}button:disabled{opacity:.5}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
-table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:middle}th{background:#faf9f6}th:first-child{width:165px}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}.tabs button{flex:1 1 150px;text-align:center;white-space:normal}.tabs button[aria-selected="true"]{background:#222;color:white;border-color:#222}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:middle}th{background:#faf9f6}th:first-child{width:165px}
 input{font:inherit;font-size:16px;text-align:center;border:2px solid #aaa;border-radius:7px;padding:8px 4px;width:105px;max-width:100%;background:white}
 input.wide{width:145px}input.good{border-color:var(--green);background:#eaf8f0}input.bad{border-color:var(--red);background:#fff0ee}
 .phrase{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.answer{color:#1359a6;font-weight:750}.translation{color:#777;font-size:13px;margin-top:5px}
@@ -24,7 +24,7 @@ input.wide{width:145px}input.good{border-color:var(--green);background:#eaf8f0}i
 <div><strong>WORDEN = pasiva</strong><p>Cuando <em>werden</em> es el auxiliar de la voz pasiva.</p><strong>Er ist informiert worden.</strong><div class="translation">Ha sido informado.</div></div></div>
 <p class="small">Ambas son formas del Partizip II de <em>werden</em>. En los tiempos compuestos de cambio de estado se utiliza <strong>sein</strong>, no <em>haben</em>.</p></section>
 <section class="card"><h2>Ejercicios</h2>
-<div class="toolbar"><label for="block">Bloque:</label><select id="block"></select></div>
+<div id="tabs" class="tabs" role="tablist" aria-label="Bloques de entrenamiento"></div>
 <p id="description" class="muted"></p>
 <div class="toolbar"><button id="consult">Consultar</button><button id="practice" class="active">Practicar</button><button id="check" class="primary">Comprobar</button><button id="clear">Borrar</button><span id="score" class="score" aria-live="polite"></span></div>
 <div style="overflow-x:auto"><table><thead><tr><th>Tiempo / función</th><th>Completa la estructura</th></tr></thead><tbody id="body"></tbody></table></div>
@@ -66,22 +66,22 @@ const blocks=[
 ["Cambio",["Wir sind älter ","."],["geworden"],"Nos hemos hecho mayores."],
 ["Pasiva",["Wir sind eingeladen ","."],["worden"],"Hemos sido invitados."]]}
 ];
-const block=document.getElementById("block"),tbody=document.getElementById("body"),score=document.getElementById("score");
+let selectedBlock=0;const tabs=document.getElementById("tabs"),tbody=document.getElementById("body"),score=document.getElementById("score");
 let mode="practice",checked=false;
-blocks.forEach((b,i)=>{let o=document.createElement("option");o.value=i;o.textContent=b.name;block.append(o)});
+blocks.forEach((b,i)=>{const btn=document.createElement("button");btn.type="button";btn.textContent=b.name;btn.setAttribute("role","tab");btn.setAttribute("aria-selected",String(i===0));btn.onclick=()=>{selectedBlock=i;checked=false;render()};tabs.append(btn)});
 const norm=s=>String(s||"").trim().toLocaleLowerCase("de-DE").replace(/\s+/g," ");
-function render(){const b=blocks[+block.value];document.getElementById("description").textContent=b.description;tbody.replaceChildren();let n=0;
+function render(){Array.from(tabs.children).forEach((t,i)=>{t.setAttribute("aria-selected",String(i===selectedBlock));t.tabIndex=i===selectedBlock?0:-1});const b=blocks[selectedBlock];document.getElementById("description").textContent=b.description;tbody.replaceChildren();let n=0;
 b.rows.forEach((r,i)=>{const tr=document.createElement("tr"),th=document.createElement("td"),td=document.createElement("td"),phrase=document.createElement("div");th.textContent=r[0];phrase.className="phrase";
-r[2].forEach((a,j)=>{phrase.append(document.createTextNode(r[1][j]));if(mode==="consult"){const span=document.createElement("span");span.className="answer";span.textContent=a;phrase.append(span)}else{const inp=document.createElement("input");inp.value=stored[block.value+"-"+i+"-"+j]||"";inp.className=a.length>10?"wide":"";inp.setAttribute("aria-label",r[0]+" espacio "+(j+1));inp.addEventListener("input",()=>{stored[block.value+"-"+i+"-"+j]=inp.value;checked=false;score.textContent="";inp.classList.remove("good","bad")});if(checked){const good=norm(inp.value)===norm(a);inp.classList.add(good?"good":"bad")}phrase.append(inp)}});
+r[2].forEach((a,j)=>{phrase.append(document.createTextNode(r[1][j]));if(mode==="consult"){const span=document.createElement("span");span.className="answer";span.textContent=a;phrase.append(span)}else{const inp=document.createElement("input");inp.value=stored[selectedBlock+"-"+i+"-"+j]||"";inp.className=a.length>10?"wide":"";inp.setAttribute("aria-label",r[0]+" espacio "+(j+1));inp.addEventListener("input",()=>{stored[selectedBlock+"-"+i+"-"+j]=inp.value;checked=false;score.textContent="";inp.classList.remove("good","bad")});if(checked){const good=norm(inp.value)===norm(a);inp.classList.add(good?"good":"bad")}phrase.append(inp)}});
 phrase.append(document.createTextNode(r[1][r[1].length-1]));td.append(phrase);const trans=document.createElement("div");trans.className="translation";trans.textContent=r[3];td.append(trans);
-if(checked&&mode==="practice"){const ok=r[2].every((a,j)=>norm(stored[block.value+"-"+i+"-"+j])===norm(a));if(ok)n++;else{const fb=document.createElement("div");fb.className="feedback";fb.textContent="Respuesta: "+r[1].map((p,j)=>p+(r[2][j]||"")).join("");td.append(fb)}}
+if(checked&&mode==="practice"){const ok=r[2].every((a,j)=>norm(stored[selectedBlock+"-"+i+"-"+j])===norm(a));if(ok)n++;else{const fb=document.createElement("div");fb.className="feedback";fb.textContent="Respuesta: "+r[1].map((p,j)=>p+(r[2][j]||"")).join("");td.append(fb)}}
 tr.append(th,td);tbody.append(tr)});
 score.textContent=checked&&mode==="practice"?n+" / "+b.rows.length+" correctas":"";document.getElementById("consult").classList.toggle("active",mode==="consult");document.getElementById("practice").classList.toggle("active",mode==="practice");document.getElementById("check").disabled=mode==="consult"}
 const stored={};
-block.addEventListener("change",()=>{checked=false;render()});
+
 document.getElementById("consult").onclick=()=>{mode="consult";checked=false;render()};
 document.getElementById("practice").onclick=()=>{mode="practice";checked=false;render()};
 document.getElementById("check").onclick=()=>{checked=true;render()};
-document.getElementById("clear").onclick=()=>{Object.keys(stored).filter(k=>k.startsWith(block.value+"-")).forEach(k=>delete stored[k]);checked=false;render()};
+document.getElementById("clear").onclick=()=>{Object.keys(stored).filter(k=>k.startsWith(selectedBlock+"-")).forEach(k=>delete stored[k]);checked=false;render()};
 render();
 </script></body></html>
