@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Werden – Entrenamiento de alemán</title>
+<style>
+:root{--bg:#f5f3ee;--ink:#222;--line:#d8d2c8;--green:#16784a;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1080px;margin:28px auto;padding:0 18px}h1{margin:0 0 6px}p{line-height:1.55}.muted{color:#67645f}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:18px 0;box-shadow:0 2px 10px #00000009}
+.rule{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rule>div{background:#f4f8f5;padding:14px;border-radius:10px}
+button,select{font:inherit;border:1px solid #bdb6aa;border-radius:9px;padding:10px 14px;background:#ebe7df;cursor:pointer}
+button.active,button.primary{background:#222;color:white;border-color:#222}button:disabled{opacity:.5}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
+table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:middle}th{background:#faf9f6}th:first-child{width:165px}
+input{font:inherit;font-size:16px;text-align:center;border:2px solid #aaa;border-radius:7px;padding:8px 4px;width:105px;max-width:100%;background:white}
+input.wide{width:145px}input.good{border-color:var(--green);background:#eaf8f0}input.bad{border-color:var(--red);background:#fff0ee}
+.phrase{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.answer{color:#1359a6;font-weight:750}.translation{color:#777;font-size:13px;margin-top:5px}
+.feedback{font-size:13px;color:var(--red);margin-top:6px}.score{font-weight:750;margin-left:auto}.small{font-size:13px;color:#666}
+@media(max-width:650px){.rule{grid-template-columns:1fr}th:first-child{width:105px}th,td{padding:8px 5px}input{width:76px}input.wide{width:120px}.card{padding:12px}}
+</style></head><body><main>
+<h1>Werden – Entrenamiento</h1>
+<p class="muted">Aprende las estructuras del verbo <strong>werden</strong> con espacios en blanco. No necesitas construir oraciones: completa solo las formas verbales.</p>
+<section class="card"><h2>Antes de comenzar: worden y geworden</h2><div class="rule">
+<div><strong>GEWORDEN = cambio de estado</strong><p>Cuando <em>werden</em> significa hacerse, volverse o convertirse.</p><strong>Er ist müde geworden.</strong><div class="translation">Se ha cansado.</div></div>
+<div><strong>WORDEN = pasiva</strong><p>Cuando <em>werden</em> es el auxiliar de la voz pasiva.</p><strong>Er ist informiert worden.</strong><div class="translation">Ha sido informado.</div></div></div>
+<p class="small">Ambas son formas del Partizip II de <em>werden</em>. En los tiempos compuestos de cambio de estado se utiliza <strong>sein</strong>, no <em>haben</em>.</p></section>
+<section class="card"><h2>Ejercicios</h2>
+<div class="toolbar"><label for="block">Bloque:</label><select id="block"></select></div>
+<p id="description" class="muted"></p>
+<div class="toolbar"><button id="consult">Consultar</button><button id="practice" class="active">Practicar</button><button id="check" class="primary">Comprobar</button><button id="clear">Borrar</button><span id="score" class="score" aria-live="polite"></span></div>
+<div style="overflow-x:auto"><table><thead><tr><th>Tiempo / función</th><th>Completa la estructura</th></tr></thead><tbody id="body"></tbody></table></div>
+</section>
+<p class="small">Consejo: empieza por el bloque 1. El Partizip II del verbo principal permanece visible; debes completar todos los auxiliares.</p>
+</main><script>
+const blocks=[
+{name:"1. Cambio de estado",description:"Werden como verbo principal: hacerse, volverse, convertirse. Completa también el auxiliar sein.",rows:[
+["Präsens",["Ich "," müde."],["werde"],"Me estoy cansando."],
+["Präteritum",["Ich "," müde."],["wurde"],"Me cansé."],
+["Perfekt",["Ich "," müde ","."],["bin","geworden"],"Me he cansado."],
+["Plusquamperfekt",["Ich "," müde ","."],["war","geworden"],"Me había cansado."],
+["Futur I",["Ich "," müde ","."],["werde","werden"],"Me cansaré."],
+["Futur II",["Ich "," müde ","."],["werde","geworden sein"],"Me habré cansado."]]},
+{name:"2. Werden y el futuro",description:"Werden como auxiliar de Futur I y Futur II. Completa también haben o sein.",rows:[
+["Futur I",["Ich "," arbeiten."],["werde"],"Trabajaré."],
+["Futur II",["Ich "," gearbeitet ","."],["werde","haben"],"Habré trabajado."],
+["Futur I (sein)",["Er "," zu Hause ","."],["wird","sein"],"Estará en casa."],
+["Futur II (sein)",["Er "," zu Hause "," ","."],["wird","gewesen","sein"],"Habrá estado en casa."]]},
+{name:"3. Vorgangspassiv",description:"Pasiva de proceso: werden + Partizip II. Seis tiempos del indicativo.",rows:[
+["Präsens",["Es "," gemacht."],["wird"],"Se hace."],
+["Präteritum",["Es "," gemacht."],["wurde"],"Se hizo."],
+["Perfekt",["Es "," gemacht ","."],["ist","worden"],"Se ha hecho."],
+["Plusquamperfekt",["Es "," gemacht ","."],["war","worden"],"Se había hecho."],
+["Futur I",["Es "," gemacht ","."],["wird","werden"],"Se hará."],
+["Futur II",["Es "," gemacht ","."],["wird","worden sein"],"Se habrá hecho."]]},
+{name:"4. Zustandspassiv",description:"Pasiva de estado: sein + Partizip II. Algunas formas compuestas son poco frecuentes.",rows:[
+["Präsens",["Die Tür "," geschlossen."],["ist"],"La puerta está cerrada."],
+["Präteritum",["Die Tür "," geschlossen."],["war"],"La puerta estaba cerrada."],
+["Perfekt",["Die Tür "," geschlossen ","."],["ist","gewesen"],"La puerta ha estado cerrada."],
+["Plusquamperfekt",["Die Tür "," geschlossen ","."],["war","gewesen"],"La puerta había estado cerrada."],
+["Futur I",["Die Tür "," geschlossen ","."],["wird","sein"],"La puerta estará cerrada."],
+["Futur II",["Die Tür "," geschlossen ","."],["wird","gewesen sein"],"La puerta habrá estado cerrada."]]},
+{name:"5. Reconocimiento mixto",description:"Reconoce geworden (cambio de estado) y worden (pasiva).",rows:[
+["Cambio",["Er ist müde ","."],["geworden"],"Se ha cansado."],
+["Pasiva",["Er ist informiert ","."],["worden"],"Ha sido informado."],
+["Cambio",["Sie ist Ärztin ","."],["geworden"],"Se ha convertido en médica."],
+["Pasiva",["Das Fenster ist geöffnet ","."],["worden"],"La ventana ha sido abierta."],
+["Cambio",["Wir sind älter ","."],["geworden"],"Nos hemos hecho mayores."],
+["Pasiva",["Wir sind eingeladen ","."],["worden"],"Hemos sido invitados."]]}
+];
+const block=document.getElementById("block"),tbody=document.getElementById("body"),score=document.getElementById("score");
+let mode="practice",checked=false;
+blocks.forEach((b,i)=>{let o=document.createElement("option");o.value=i;o.textContent=b.name;block.append(o)});
+const norm=s=>String(s||"").trim().toLocaleLowerCase("de-DE").replace(/\s+/g," ");
+function render(){const b=blocks[+block.value];document.getElementById("description").textContent=b.description;tbody.replaceChildren();let n=0;
+b.rows.forEach((r,i)=>{const tr=document.createElement("tr"),th=document.createElement("td"),td=document.createElement("td"),phrase=document.createElement("div");th.textContent=r[0];phrase.className="phrase";
+r[2].forEach((a,j)=>{phrase.append(document.createTextNode(r[1][j]));if(mode==="consult"){const span=document.createElement("span");span.className="answer";span.textContent=a;phrase.append(span)}else{const inp=document.createElement("input");inp.value=stored[block.value+"-"+i+"-"+j]||"";inp.className=a.length>10?"wide":"";inp.setAttribute("aria-label",r[0]+" espacio "+(j+1));inp.addEventListener("input",()=>{stored[block.value+"-"+i+"-"+j]=inp.value;checked=false;score.textContent="";inp.classList.remove("good","bad")});if(checked){const good=norm(inp.value)===norm(a);inp.classList.add(good?"good":"bad")}phrase.append(inp)}});
+phrase.append(document.createTextNode(r[1][r[1].length-1]));td.append(phrase);const trans=document.createElement("div");trans.className="translation";trans.textContent=r[3];td.append(trans);
+if(checked&&mode==="practice"){const ok=r[2].every((a,j)=>norm(stored[block.value+"-"+i+"-"+j])===norm(a));if(ok)n++;else{const fb=document.createElement("div");fb.className="feedback";fb.textContent="Respuesta: "+r[1].map((p,j)=>p+(r[2][j]||"")).join("");td.append(fb)}}
+tr.append(th,td);tbody.append(tr)});
+score.textContent=checked&&mode==="practice"?n+" / "+b.rows.length+" correctas":"";document.getElementById("consult").classList.toggle("active",mode==="consult");document.getElementById("practice").classList.toggle("active",mode==="practice");document.getElementById("check").disabled=mode==="consult"}
+const stored={};
+block.addEventListener("change",()=>{checked=false;render()});
+document.getElementById("consult").onclick=()=>{mode="consult";checked=false;render()};
+document.getElementById("practice").onclick=()=>{mode="practice";checked=false;render()};
+document.getElementById("check").onclick=()=>{checked=true;render()};
+document.getElementById("clear").onclick=()=>{Object.keys(stored).filter(k=>k.startsWith(block.value+"-")).forEach(k=>delete stored[k]);checked=false;render()};
+render();
+</script></body></html>
